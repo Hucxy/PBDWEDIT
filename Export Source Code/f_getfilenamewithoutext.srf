@@ -1,0 +1,16 @@
+$PBExportHeader$f_getfilenamewithoutext.srf
+global type f_getfilenamewithoutext from function_object
+end type
+
+forward prototypes
+global function string f_getfilenamewithoutext (readonly string as_path)
+end prototypes
+
+global function string f_getfilenamewithoutext (readonly string as_path);long ll_l
+string ls_filename,ls_filename1
+ls_filename1 = f_getfilename(as_path)
+ls_filename = f_posmid(ls_filename1,"",".",ll_l)
+if ls_filename="" then ls_filename = ls_filename1
+return ls_filename
+end function
+

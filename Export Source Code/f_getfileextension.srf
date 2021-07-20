@@ -1,0 +1,14 @@
+$PBExportHeader$f_getfileextension.srf
+global type f_getfileextension from function_object
+end type
+
+forward prototypes
+global function string f_getfileextension (readonly string as_path)
+end prototypes
+
+global function string f_getfileextension (readonly string as_path);long ll_l
+string ls_fileextension
+ls_fileextension = f_lastposmid(f_getfilename(as_path),".","",ll_l)
+return ls_fileextension
+end function
+

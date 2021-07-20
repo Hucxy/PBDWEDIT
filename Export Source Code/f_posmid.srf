@@ -1,0 +1,36 @@
+$PBExportHeader$f_posmid.srf
+global type f_posmid from function_object
+end type
+
+forward prototypes
+global function string f_posmid (readonly string as_str, readonly string as_tou, readonly string as_wei, ref long al_l)
+end prototypes
+
+global function string f_posmid (readonly string as_str, readonly string as_tou, readonly string as_wei, ref long al_l);long ll_tou,ll_wei
+if al_l<1 then al_l=1
+if as_tou="" then
+	ll_tou=al_l
+else
+	ll_tou=pos(as_str,as_tou,al_l)
+	if ll_tou=0 then
+		al_l=0
+		return ""
+	end if
+	ll_tou+=len(as_tou)
+end if
+if as_wei="" then
+	ll_wei=len(as_str)
+	al_l=0
+else
+	ll_wei=pos(as_str,as_wei,ll_tou)
+	if ll_wei=0 then 
+		al_l=0
+		return ""
+	end if
+	al_l=ll_wei+len(as_wei)
+	if al_l=len(as_str) then al_l=0
+	ll_wei -= 1
+end if
+return mid(as_str,ll_tou,ll_wei - ll_tou + 1)
+end function
+

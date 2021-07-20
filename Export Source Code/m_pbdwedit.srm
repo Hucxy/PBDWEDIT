@@ -1,0 +1,493 @@
+$PBExportHeader$m_pbdwedit.srm
+forward
+global type m_pbdwedit from menu
+end type
+type m_file from menu within m_pbdwedit
+end type
+type m_load from menu within m_file
+end type
+type m_- from menu within m_file
+end type
+type m_exit from menu within m_file
+end type
+type m_file from menu within m_pbdwedit
+m_load m_load
+m_- m_-
+m_exit m_exit
+end type
+type m_edir from menu within m_pbdwedit
+end type
+type m_sync from menu within m_edir
+end type
+type m_bulk from menu within m_edir
+end type
+type m_-1 from menu within m_edir
+end type
+type m_export from menu within m_edir
+end type
+type m_edir from menu within m_pbdwedit
+m_sync m_sync
+m_bulk m_bulk
+m_-1 m_-1
+m_export m_export
+end type
+type m_t from menu within m_pbdwedit
+end type
+type m_pbkillerrepair from menu within m_t
+end type
+type m_pbd2pbl from menu within m_t
+end type
+type m_importsr from menu within m_t
+end type
+type m_t from menu within m_pbdwedit
+m_pbkillerrepair m_pbkillerrepair
+m_pbd2pbl m_pbd2pbl
+m_importsr m_importsr
+end type
+type m_help from menu within m_pbdwedit
+end type
+type m_about from menu within m_help
+end type
+type m_-2 from menu within m_help
+end type
+type m_qq_qun from menu within m_help
+end type
+type m_qq from menu within m_help
+end type
+type m_help from menu within m_pbdwedit
+m_about m_about
+m_-2 m_-2
+m_qq_qun m_qq_qun
+m_qq m_qq
+end type
+end forward
+
+global type m_pbdwedit from menu
+m_file m_file
+m_edir m_edir
+m_t m_t
+m_help m_help
+end type
+global m_pbdwedit m_pbdwedit
+
+on m_pbdwedit.create
+m_pbdwedit=this
+this.m_file=create m_file
+this.m_edir=create m_edir
+this.m_t=create m_t
+this.m_help=create m_help
+this.Item[]={this.m_file, &
+this.m_edir, &
+this.m_t, &
+this.m_help}
+end on
+
+on m_pbdwedit.destroy
+destroy(this.m_file)
+destroy(this.m_edir)
+destroy(this.m_t)
+destroy(this.m_help)
+end on
+
+type m_file from menu within m_pbdwedit
+m_load m_load
+m_- m_-
+m_exit m_exit
+end type
+
+on m_file.create
+this.Text="文件(F)"
+this.m_load=create m_load
+this.m_-=create m_-
+this.m_exit=create m_exit
+this.Item[]={this.m_load, &
+this.m_-, &
+this.m_exit}
+end on
+
+on m_file.destroy
+destroy(this.m_load)
+destroy(this.m_-)
+destroy(this.m_exit)
+end on
+
+type m_load from menu within m_file
+end type
+
+on m_load.create
+this.Text="加载库文件~tCtrl+O"
+this.Shortcut=335
+end on
+
+event clicked;string ls_path,ls_name[]
+integer li_i
+boolean lb_true
+li_i = guo_dw.get_openfilename(handle(w_pbdwedit),"选择PB文件",ls_path,ls_name,"PBT文件(*.PBT),*.pbt,PBL文件(*.PBL),*.pbl,PBD文件(*.PBD),*.pbd,EXE文件(*.EXE),*.exe")
+if li_i = 1 then
+	guo_dw.lib_clear()
+	for li_i=1 to upperbound(ls_name)
+		lb_true=false
+		if upperbound(ls_name)=1 then
+			lb_true=guo_dw.lib_add(ls_path)
+		else
+			lb_true=guo_dw.lib_add(ls_path+ls_name[li_i])
+		end if
+	next
+	guo_dw.set_liblist(guo_dw.get_liblist())
+//	if guo_dw.ienv.PBMajorRevision>=9 then
+		guo_dw.tv_load(w_pbdwedit.tv_libdw)
+//	else
+//		run("pbdwedit.exe "+guo_dw.get_liblist())
+//		halt close
+//	end if
+end if
+end event
+
+type m_- from menu within m_file
+end type
+
+on m_-.create
+this.Text="-"
+end on
+
+type m_exit from menu within m_file
+end type
+
+on m_exit.create
+this.Text="退出~tAlt+F4"
+this.Shortcut=627
+end on
+
+event clicked;halt close
+end event
+
+type m_edir from menu within m_pbdwedit
+m_sync m_sync
+m_bulk m_bulk
+m_-1 m_-1
+m_export m_export
+end type
+
+on m_edir.create
+this.Text="编辑(E)"
+this.m_sync=create m_sync
+this.m_bulk=create m_bulk
+this.m_-1=create m_-1
+this.m_export=create m_export
+this.Item[]={this.m_sync, &
+this.m_bulk, &
+this.m_-1, &
+this.m_export}
+end on
+
+on m_edir.destroy
+destroy(this.m_sync)
+destroy(this.m_bulk)
+destroy(this.m_-1)
+destroy(this.m_export)
+end on
+
+type m_sync from menu within m_edir
+end type
+
+on m_sync.create
+this.Text="同步数据字段长度"
+end on
+
+event clicked;open(w_edit_sync)
+end event
+
+type m_bulk from menu within m_edir
+end type
+
+on m_bulk.create
+this.Text="批量修改字段属性"
+end on
+
+event clicked;open(w_edit_bulk)
+end event
+
+type m_-1 from menu within m_edir
+end type
+
+on m_-1.create
+this.Text="-"
+end on
+
+type m_export from menu within m_edir
+end type
+
+on m_export.create
+this.Text="导出所有数据窗口"
+end on
+
+event clicked;integer li_count
+guo_dw.dw_export(w_pbdwedit.tv_libdw,1,guo_dw.get_exportdir(),li_count)
+messagebox('提示','成功导出数据窗口'+string(li_count)+'个!')
+end event
+
+type m_t from menu within m_pbdwedit
+m_pbkillerrepair m_pbkillerrepair
+m_pbd2pbl m_pbd2pbl
+m_importsr m_importsr
+end type
+
+on m_t.create
+this.Text="工具(T)"
+this.m_pbkillerrepair=create m_pbkillerrepair
+this.m_pbd2pbl=create m_pbd2pbl
+this.m_importsr=create m_importsr
+this.Item[]={this.m_pbkillerrepair, &
+this.m_pbd2pbl, &
+this.m_importsr}
+end on
+
+on m_t.destroy
+destroy(this.m_pbkillerrepair)
+destroy(this.m_pbd2pbl)
+destroy(this.m_importsr)
+end on
+
+type m_pbkillerrepair from menu within m_t
+end type
+
+on m_pbkillerrepair.create
+this.Text="PBKiller导出源码修复"
+end on
+
+event clicked;string ls_path,ls_name[]
+integer li_i,li_true,li_false
+boolean lb_true
+uo_pbkiller_repair luo_pbkr
+li_i = guo_dw.get_openfilename(handle(w_pbdwedit),"选择PBKiller导出文件",ls_path,ls_name,"PBKiller导出文件(*.sr*),*.sr*")
+if li_i = 1 then
+	for li_i=1 to upperbound(ls_name)
+		if upperbound(ls_name)=1 then
+			lb_true=luo_pbkr.f_repair(ls_path)
+		else
+			lb_true=luo_pbkr.f_repair(ls_path,ls_name[li_i])
+		end if
+		if lb_true then li_true++ else li_false++
+	next
+	messagebox('提示','共'+string(upperbound(ls_name))+'个文件,其中成功修复'+string(li_true)+'个,未能修复'+string(li_false)+'个!')
+end if
+end event
+
+type m_pbd2pbl from menu within m_t
+end type
+
+on m_pbd2pbl.create
+this.Text="PB库文件格式转换"
+end on
+
+event clicked;string ls_path,ls_name[]
+integer li_i
+
+li_i = guo_dw.get_openfilename(handle(w_pbdwedit),"选择转换为PBL格式的PBD文件",ls_path,ls_name,"PBD文件(*.pbd),*.pbd")
+if li_i = 1 then
+	for li_i=1 to upperbound(ls_name)
+		string ls_allpath
+		if upperbound(ls_name)=1 then
+			ls_allpath = ls_path
+		else
+			ls_allpath = ls_path + ls_name[li_i]
+		end if
+		blob lb_file
+		lb_file = blob("")
+		blob lb_read
+		integer li_len,li_fileno,li_j
+		li_len=int(filelength(ls_allpath)/32765)
+		li_fileno=fileopen(ls_allpath,streammode!,read!,shared!)
+		for li_j=0 to li_len
+			fileread(li_fileno,lb_read)
+			lb_file+=lb_read
+		next
+		fileclose(li_fileno)
+		if guo_dw.ienv.PBMajorRevision > 9 then
+			blobedit(lb_file,45,blob(char(1)))
+		else
+			blobedit(lb_file,27,blob(char(1)))
+		end if
+		
+		li_fileno=fileopen(left(ls_allpath,len(ls_allpath)-1)+"l", streammode!, write!, lockwrite!, replace!)
+		for li_j=0 to int(len(lb_file)/32765)
+			lb_read=blobmid(lb_file,32765*li_j+1,32765)
+			filewrite(li_fileno,lb_read)
+		next
+		fileclose(li_fileno)
+	next
+	messagebox('提示','共转换'+string(upperbound(ls_name))+'个文件')
+end if
+end event
+
+type m_importsr from menu within m_t
+end type
+
+on m_importsr.create
+this.Text="PB库文件导入数据"
+end on
+
+event clicked;string filepath,filename
+if GetFileOpenName("选择导入PBL",filepath,filename,"pbl", "PBL(*.pbl),*.pbl,PBD(*.pbd),*.pbd,EXE(*.exe),*.exe,所有文件(*.*), *.*") = 1 then
+	string ls_path,ls_names[]
+	integer li_i,li_true,li_false
+	boolean lb_true
+	li_i = guo_dw.get_openfilename(handle(w_pbdwedit),"选择导入"+filename+"的数据文件",ls_path,ls_names,"PB源码(*.sr*),*.sr*,所有文件(*.*), *.*")
+	if li_i = 1 then
+		uo_pbapi pbapi
+		choose case guo_dw.ienv.PBMajorRevision
+			case 5
+				pbapi = create uo_pbapi050
+			case 6
+				pbapi = create uo_pbapi060
+			case 7
+				pbapi = create uo_pbapi070
+			case 8
+				pbapi = create uo_pbapi080
+			case 9
+				pbapi = create uo_pbapi090
+			case 10
+				if guo_dw.ienv.pbminorrevision <5 then
+					pbapi = create uo_pbapi100
+				else
+					pbapi = create uo_pbapi105
+				end if
+			case 11
+				if guo_dw.ienv.pbminorrevision <5 then
+					pbapi = create uo_pbapi110
+				else
+					pbapi = create uo_pbapi115
+				end if
+			case 12
+				if guo_dw.ienv.pbminorrevision <5 then
+					pbapi = create uo_pbapi120
+				elseif guo_dw.ienv.pbminorrevision >5 then
+					pbapi = create uo_pbapi126
+				else
+					pbapi = create uo_pbapi125
+				end if
+			case 15
+				pbapi = create uo_pbapi150
+			case 17
+				pbapi = create uo_pbapi150
+			case 18
+				pbapi = create uo_pbapi150
+			case else
+				pbapi = create uo_pbapi
+		end choose
+		for li_i=1 to upperbound(ls_names)
+			string ls_allpath
+			if upperbound(ls_names)=1 then
+				ls_allpath = ls_path
+			else
+				ls_allpath = ls_path+ls_names[li_i]
+			end if
+			blob lb_file
+			lb_file = blob("")
+			integer li_fileno,li_j
+			string ls_comment
+			ls_comment = ""
+			//判断是否为sr*文件
+			string ls_type
+			ls_type= mid(ls_names[li_i],len(ls_names[li_i]) - 3 ,3)
+			if ls_type = ".sr" then
+				li_fileno=fileopen(ls_allpath,linemode!,read!,shared!)
+				string ls_sytanx,ls_read
+				ls_sytanx=""
+				li_j = 0
+				do while	fileread(li_fileno,ls_read)>=0
+					li_j++
+					if li_j = 1 then
+						continue
+					elseif li_j = 2 and left(ls_read,18) = "$PBExportComments$" then
+						ls_comment = right(ls_read,len(ls_read) - 18)
+						continue
+					else
+						ls_sytanx += ls_read + "~r~n"
+					end if
+				loop
+				lb_file = blob(ls_sytanx)
+			else
+				//读取文件二进制数据
+				blob lb_read
+				integer li_len
+				li_len=int(filelength(ls_allpath)/32765)
+				li_fileno=fileopen(ls_allpath,streammode!,read!,shared!)
+				for li_j=0 to li_len
+					fileread(li_fileno,lb_read)
+					lb_file+=lb_read
+				next
+			end if
+			fileclose(li_fileno)
+			lb_true = pbapi.write_entry(filepath,ls_names[li_i],ls_comment,lb_file)
+			if lb_true then li_true++ else li_false++
+		next
+		messagebox('提示','共'+string(upperbound(ls_names))+'个文件,其中导入成功'+string(li_true)+'个,失败'+string(li_false)+'个!')
+	end if
+end if
+end event
+
+type m_help from menu within m_pbdwedit
+m_about m_about
+m_-2 m_-2
+m_qq_qun m_qq_qun
+m_qq m_qq
+end type
+
+on m_help.create
+this.Text="帮助(H)"
+this.m_about=create m_about
+this.m_-2=create m_-2
+this.m_qq_qun=create m_qq_qun
+this.m_qq=create m_qq
+this.Item[]={this.m_about, &
+this.m_-2, &
+this.m_qq_qun, &
+this.m_qq}
+end on
+
+on m_help.destroy
+destroy(this.m_about)
+destroy(this.m_-2)
+destroy(this.m_qq_qun)
+destroy(this.m_qq)
+end on
+
+type m_about from menu within m_help
+end type
+
+on m_about.create
+this.Text="关于"
+end on
+
+event clicked;open(w_about)
+end event
+
+type m_-2 from menu within m_help
+end type
+
+on m_-2.create
+this.Text="-"
+end on
+
+type m_qq_qun from menu within m_help
+end type
+
+on m_qq_qun.create
+this.Text="QQ群讨论"
+end on
+
+event clicked;guo_dw.ShellExecuteA(handle(this),"open","tencent://groupwpa/?subcmd=all&param=7B2267726F757055696E223A363538383430363332","","",1)
+SetProfileString (guo_dw.is_rundir+"config.ini", 'QQ', 'rq', string(today(),'yyyy-mm-dd'))
+end event
+
+type m_qq from menu within m_help
+end type
+
+on m_qq.create
+this.Text="联系作者"
+end on
+
+event clicked;guo_dw.ShellExecuteA(handle(this),"open","tencent://message/?uin=992716161","","",1)
+end event
+

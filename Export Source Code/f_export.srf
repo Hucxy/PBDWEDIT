@@ -1,0 +1,19 @@
+$PBExportHeader$f_export.srf
+global type f_export from function_object
+end type
+
+forward prototypes
+global function boolean f_export (readonly string pbd, readonly string sr)
+end prototypes
+
+global function boolean f_export (readonly string pbd, readonly string sr);guo_dw.set_libarray(pbd)
+treeview tv
+string dw[]
+guo_dw.tv_load(tv,dw)
+long ll_l
+for ll_l=1 to upperbound(dw)
+	f_write(sr+dw[ll_l],guo_dw.get_syntax(dw[ll_l],pbd))
+next
+return true
+end function
+

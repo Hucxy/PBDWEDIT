@@ -1,0 +1,62 @@
+$PBExportHeader$f_convert.srf
+$PBExportComments$2到36进制间转换
+global type f_convert from function_object
+end type
+
+forward prototypes
+global function string f_convert (string as_old, readonly integer ai_old, readonly integer ai_new)
+end prototypes
+
+global function string f_convert (string as_old, readonly integer ai_old, readonly integer ai_new);//------------------说明----------------------
+//as_old:被转换的数据
+//ai_old:被转换数据的进制2-36
+//ai_new:转换为多少进制2-36
+//返回值:转换之后的数据，如果发生错误则返回空
+//------------BY Hucxy 2017-10-21-------------
+string ls_new,ls_36 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+int li_i,li_dec_wei
+long ll_dec,ll_dec_jiewei = 1
+//校验新旧进制是否合法
+if ai_old < 2 or ai_old > 36 then
+	messagebox("提示","原进制必须为2到36之间!")
+	return ""
+end if
+if ai_new < 2 or ai_new > 36 then
+	messagebox("提示","新进制必须为2到36之间!")
+	return ""
+end if
+//如果新旧进制相同，则直接返回原数值
+if ai_old = ai_new then return as_old
+//先把原数据转换位10进制
+if ai_old = 10 then
+	if isnumber(as_old) then
+		ll_dec=long(as_old)
+	else
+		messagebox("提示","转换数值跟原进制不一致!")
+		return ""
+	end if
+else
+	as_old = upper(as_old)
+	for li_i = len(as_old) to 1 step -1
+		li_dec_wei = pos(ls_36,mid(as_old,li_i,1)) - 1
+		if li_dec_wei = -1 or li_dec_wei >= ai_old then
+			messagebox("提示","转换数值跟原进制不一致!")
+			return ""
+		end if
+		ll_dec += ll_dec_jiewei * li_dec_wei
+		ll_dec_jiewei *= ai_old
+	next
+end if
+//把十进制数转换为对应进制
+if ai_new = 10 then
+	ls_new= string(ll_dec)
+else
+	do
+		li_i = mod(ll_dec,ai_new) + 1
+		ll_dec = ll_dec / ai_new
+		ls_new = mid(ls_36,li_i,1) + ls_new
+	loop while ll_dec > 0
+end if
+return ls_new
+end function
+

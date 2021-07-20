@@ -1,0 +1,11 @@
+$PBExportHeader$f_lastposmid.srf
+global type f_lastposmid from function_object
+end type
+
+forward prototypes
+global function string f_lastposmid (readonly string as_str, readonly string as_tou, readonly string as_wei, ref long al_l)
+end prototypes
+
+global function string f_lastposmid (readonly string as_str, readonly string as_tou, readonly string as_wei, ref long al_l);return reverse(f_posmid(reverse(as_str),reverse(as_wei),reverse(as_tou),al_l))
+end function
+

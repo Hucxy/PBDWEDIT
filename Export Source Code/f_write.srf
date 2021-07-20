@@ -1,0 +1,20 @@
+$PBExportHeader$f_write.srf
+global type f_write from function_object
+end type
+
+forward prototypes
+global function boolean f_write (readonly string as_path, readonly string as_file)
+end prototypes
+
+global function boolean f_write (readonly string as_path, readonly string as_file);string ls_write
+integer li_fileno,li_i
+li_fileno=fileopen(as_path,streammode!, write!, lockwrite!, replace!)
+if li_fileno=0 then return false
+for li_i=0 to int(len(as_file)/32765)
+	ls_write=mid(as_file,32765*li_i+1,32765)
+	filewrite(li_fileno,ls_write)
+next
+fileclose(li_fileno)
+return true
+end function
+

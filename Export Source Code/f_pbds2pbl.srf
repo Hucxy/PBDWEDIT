@@ -1,0 +1,27 @@
+$PBExportHeader$f_pbds2pbl.srf
+global type f_pbds2pbl from function_object
+end type
+
+forward prototypes
+global function boolean f_pbds2pbl (string pbd, string pbl, string sr)
+end prototypes
+
+global function boolean f_pbds2pbl (string pbd, string pbl, string sr);string pbds[]
+string ls_pbd
+long ll_l
+//获取所有pbd
+do while true
+	ls_pbd = f_posmid(pbd,"",",",ll_l)
+	if ls_pbd = "" then
+		ls_pbd = right(pbd,len(pbd) - ll_l)
+		pbds[upperbound(pbds)+1] = ls_pbd
+		exit
+	else
+		pbds[upperbound(pbds)+1] = ls_pbd
+	end if
+loop
+uo_pbd2pbl luo_pbd2pbl
+//生成所有pbd到pbl
+return luo_pbd2pbl.f_pbd2pbl(pbds,pbl,sr)
+end function
+

@@ -1,0 +1,149 @@
+$PBExportHeader$m_tv_libdw.srm
+forward
+global type m_tv_libdw from menu
+end type
+type m_remove from menu within m_tv_libdw
+end type
+type m_remove from menu within m_tv_libdw
+end type
+type m_copy from menu within m_tv_libdw
+end type
+type m_copy from menu within m_tv_libdw
+end type
+type m_move from menu within m_tv_libdw
+end type
+type m_move from menu within m_tv_libdw
+end type
+type m_delete from menu within m_tv_libdw
+end type
+type m_delete from menu within m_tv_libdw
+end type
+type m_export from menu within m_tv_libdw
+end type
+type m_export from menu within m_tv_libdw
+end type
+type m_import from menu within m_tv_libdw
+end type
+type m_import from menu within m_tv_libdw
+end type
+end forward
+
+global type m_tv_libdw from menu
+m_remove m_remove
+m_copy m_copy
+m_move m_move
+m_delete m_delete
+m_export m_export
+m_import m_import
+end type
+global m_tv_libdw m_tv_libdw
+
+on m_tv_libdw.create
+m_tv_libdw=this
+this.m_remove=create m_remove
+this.m_copy=create m_copy
+this.m_move=create m_move
+this.m_delete=create m_delete
+this.m_export=create m_export
+this.m_import=create m_import
+this.Item[]={this.m_remove, &
+this.m_copy, &
+this.m_move, &
+this.m_delete, &
+this.m_export, &
+this.m_import}
+end on
+
+on m_tv_libdw.destroy
+destroy(this.m_remove)
+destroy(this.m_copy)
+destroy(this.m_move)
+destroy(this.m_delete)
+destroy(this.m_export)
+destroy(this.m_import)
+end on
+
+type m_remove from menu within m_tv_libdw
+end type
+
+on m_remove.create
+this.Text="移除"
+end on
+
+on m_remove.destroy
+end on
+
+event clicked;guo_dw.lib_remove(w_pbdwedit.tv_libdw,w_pbdwedit.tv_libdw.FindItem(CurrentTreeItem!,0))
+end event
+
+type m_copy from menu within m_tv_libdw
+end type
+
+on m_copy.create
+this.Text="复制"
+this.Visible=false
+end on
+
+on m_copy.destroy
+end on
+
+event clicked;guo_dw.dw_copy(w_pbdwedit.tv_libdw,w_pbdwedit.tv_libdw.FindItem(CurrentTreeItem!,0))
+end event
+
+type m_move from menu within m_tv_libdw
+end type
+
+on m_move.create
+this.Text="移动"
+this.Visible=false
+end on
+
+on m_move.destroy
+end on
+
+event clicked;guo_dw.dw_move(w_pbdwedit.tv_libdw,w_pbdwedit.tv_libdw.FindItem(CurrentTreeItem!,0))
+end event
+
+type m_delete from menu within m_tv_libdw
+end type
+
+on m_delete.create
+this.Text="删除"
+this.Visible=false
+end on
+
+on m_delete.destroy
+end on
+
+event clicked;if messagebox("提示","该操作不可恢复，确定要删除该数据窗口吗?",question!,yesno!,2)=1 then guo_dw.dw_delete(w_pbdwedit.tv_libdw,w_pbdwedit.tv_libdw.FindItem(CurrentTreeItem!,0))
+end event
+
+type m_export from menu within m_tv_libdw
+end type
+
+on m_export.create
+this.Text="导出"
+end on
+
+on m_export.destroy
+end on
+
+event clicked;integer li_count
+guo_dw.dw_export(w_pbdwedit.tv_libdw,w_pbdwedit.tv_libdw.FindItem(CurrentTreeItem!,0),guo_dw.get_exportdir(),li_count)
+messagebox('提示','成功导出数据窗口'+string(li_count)+'个!')
+end event
+
+type m_import from menu within m_tv_libdw
+end type
+
+on m_import.create
+this.Text="导入"
+this.Visible=false
+end on
+
+on m_import.destroy
+end on
+
+event clicked;guo_dw.dw_import(w_pbdwedit.tv_libdw,w_pbdwedit.tv_libdw.FindItem(CurrentTreeItem!,0))
+end event
+

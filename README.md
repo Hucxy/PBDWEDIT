@@ -1,2 +1,2 @@
 # PBDWEDIT
-PBDWEDIT试一个批量修改PowerBuilder库文件数据窗口的小工具。它还具有绑定PBKiller导出源码SQL语句参数以及批量导入sr*源文件到库文件等功能
+PBDWEDIT是一个批量修改PowerBuilder库文件数据窗口的小工具。它还具有绑定PBKiller导出源码SQL语句参数以及批量导入sr*源文件到库文件等功能

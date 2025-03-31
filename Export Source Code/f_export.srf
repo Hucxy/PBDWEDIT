@@ -8,12 +8,13 @@ end prototypes
 
 global function boolean f_export (readonly string pbd, readonly string sr);guo_dw.set_libarray(pbd)
 treeview tv
+tv = create treeview
 string dw[]
 guo_dw.tv_load(tv,dw)
 long ll_l
 for ll_l=1 to upperbound(dw)
 	f_write(sr+dw[ll_l],guo_dw.get_syntax(dw[ll_l],pbd))
 next
+destroy tv
 return true
 end function
-

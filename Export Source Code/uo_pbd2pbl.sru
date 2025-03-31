@@ -42,7 +42,7 @@ public function boolean f_pbd2pbl (readonly string as_pbd, readonly string as_pb
 public function boolean f_pbd2pbl (readonly string as_pbd, readonly string as_pbl, readonly string as_sr)
 public function boolean f_pbd2pbl (readonly string as_pbd[], readonly string as_pbl, readonly string as_sr)
 public subroutine f_getfilelist (string as_directoryname, string as_filetype, ref string as_files[])
-public function boolean f_libimport (string as_pblib, string as_srpath, string as_srname)
+public function boolean f_libimport (string as_pblib, string as_sr)
 end prototypes
 
 public function boolean f_pbd2pbl (readonly string as_pbd, readonly string as_pbl);blob lb_file
@@ -78,7 +78,7 @@ string files[]
 f_getfilelist(as_sr,"*",files) 
 long ll_l
 for ll_l=1 to upperbound(files)
-	f_libimport(as_pbl,as_sr,files[ll_l])
+	f_libimport(as_pbl,as_sr + files[ll_l])
 next
 return true
 end function
@@ -133,16 +133,16 @@ do   while  true
 loop
 end subroutine
 
-public function boolean f_libimport (string as_pblib, string as_srpath, string as_srname);blob lb_file
+public function boolean f_libimport (string as_pblib, string as_sr);blob lb_file
 lb_file = blob("")
 integer li_fileno,li_j
 string ls_comment
 ls_comment = ""
 //判断是否为sr*文件
 string ls_type
-ls_type= mid(as_srname,len(as_srname) - 3 ,3)
+ls_type= mid(as_sr,len(as_sr) - 3 ,3)
 if ls_type = ".sr" then
-	li_fileno=fileopen(as_srpath+as_srname,linemode!,read!,shared!)
+	li_fileno=fileopen(as_sr,linemode!,read!,shared!)
 	string ls_sytanx,ls_read
 	ls_sytanx=""
 	li_j = 0
@@ -162,15 +162,15 @@ else
 	//读取文件二进制数据
 	blob lb_read
 	integer li_len
-	li_len=int(filelength(as_srpath+as_srname)/32765)
-	li_fileno=fileopen(as_srpath+as_srname,streammode!,read!,shared!)
+	li_len=int(filelength(as_sr)/32765)
+	li_fileno=fileopen(as_sr,streammode!,read!,shared!)
 	for li_j=0 to li_len
 		fileread(li_fileno,lb_read)
 		lb_file+=lb_read
 	next
 end if
 fileclose(li_fileno)
-return iuo_pbapi.write_entry(as_pblib,as_srname,ls_comment,lb_file)
+return iuo_pbapi.write_entry(as_pblib,as_sr,ls_comment,lb_file)
 end function
 
 on uo_pbd2pbl.create

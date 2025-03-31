@@ -41,6 +41,7 @@ guo_dw = create uo_dw
 string ls_liblist
 ls_liblist=commandparm()
 //ls_liblist = "-PBD2PBL|PBDÂ·¾¶|PBLÂ·¾¶|sr*Â·¾¶|"
+//ls_liblist = "-ExportDW|C:\PB\PB5\Powersoft\PowerBuilder 5.0\Examples\Code Examples\PBEXDPBS.PBD|C:\PbdViewer_Fix\TEMP\80131167-90f4-486a-9730-65bab6b2e1e8\|"
 if ls_liblist <> "" then
 	string pbd,sr,pbl
 	long ll_l
@@ -50,14 +51,16 @@ if ls_liblist <> "" then
 		pbl = f_posmid(ls_liblist,"","|",ll_l)
 		sr = f_posmid(ls_liblist,"","|",ll_l)
 		f_pbds2pbl(pbd,pbl,sr)
-		halt
+		open(w_pb5close)
+		HALT CLOSE
 		return
 	elseif left(ls_liblist,9) = "-ExportDW" then
 		ll_l = 11
 		pbd = f_posmid(ls_liblist,"","|",ll_l)
 		sr = f_posmid(ls_liblist,"","|",ll_l)
 		f_export(pbd,sr)
-		halt
+		open(w_pb5close)
+		HALT CLOSE
 		return
 	end if
 else
@@ -66,7 +69,6 @@ end if
 if ls_liblist<>"" then guo_dw.set_libarray(ls_liblist)
 open(w_pbdwedit)
 end event
-
 event close;destroy guo_dw
 end event
 

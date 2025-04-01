@@ -1,6 +1,6 @@
 $PBExportHeader$p.srj
 EXE:pbdwedit.exe,,0,1
-CMP:1,0,0,2,0,0
+CMP:0,0,0,2,0,0
 PBD:c:\pbdwedit\pbdwedit.pbl,,0
 OBJ:c:\pbdwedit\pbdwedit.pbl,f_write,f
 OBJ:c:\pbdwedit\pbdwedit.pbl,uo_pbapi120,u

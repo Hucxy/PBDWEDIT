@@ -89,6 +89,7 @@ destroy(this.m_t)
 destroy(this.m_help)
 end on
 
+
 type m_file from menu within m_pbdwedit
 m_load m_load
 m_- m_-
@@ -110,6 +111,7 @@ destroy(this.m_load)
 destroy(this.m_-)
 destroy(this.m_exit)
 end on
+
 
 type m_load from menu within m_file
 end type
@@ -143,12 +145,14 @@ if li_i = 1 then
 end if
 end event
 
+
 type m_- from menu within m_file
 end type
 
 on m_-.create
 this.Text="-"
 end on
+
 
 type m_exit from menu within m_file
 end type
@@ -160,6 +164,7 @@ end on
 
 event clicked;halt close
 end event
+
 
 type m_edir from menu within m_pbdwedit
 m_sync m_sync
@@ -187,6 +192,7 @@ destroy(this.m_-1)
 destroy(this.m_export)
 end on
 
+
 type m_sync from menu within m_edir
 end type
 
@@ -196,6 +202,7 @@ end on
 
 event clicked;open(w_edit_sync)
 end event
+
 
 type m_bulk from menu within m_edir
 end type
@@ -207,12 +214,14 @@ end on
 event clicked;open(w_edit_bulk)
 end event
 
+
 type m_-1 from menu within m_edir
 end type
 
 on m_-1.create
 this.Text="-"
 end on
+
 
 type m_export from menu within m_edir
 end type
@@ -225,6 +234,7 @@ event clicked;integer li_count
 guo_dw.dw_export(w_pbdwedit.tv_libdw,1,guo_dw.get_exportdir(),li_count)
 messagebox('提示','成功导出数据窗口'+string(li_count)+'个!')
 end event
+
 
 type m_t from menu within m_pbdwedit
 m_pbkillerrepair m_pbkillerrepair
@@ -247,6 +257,7 @@ destroy(this.m_pbkillerrepair)
 destroy(this.m_pbd2pbl)
 destroy(this.m_importsr)
 end on
+
 
 type m_pbkillerrepair from menu within m_t
 end type
@@ -273,6 +284,7 @@ if li_i = 1 then
 end if
 end event
 
+
 type m_pbd2pbl from menu within m_t
 end type
 
@@ -282,9 +294,10 @@ end on
 
 event clicked;string ls_path,ls_name[]
 integer li_i
-
-li_i = guo_dw.get_openfilename(handle(w_pbdwedit),"选择转换为PBL格式的PBD文件",ls_path,ls_name,"PBD文件(*.pbd),*.pbd")
+if messagebox("提示","请确认是否已有所有pbd反编译后的sr*源码文件，没有请不要继续!",question!,yesno!,2)=2 then return
+li_i = guo_dw.get_openfilename(handle(w_pbdwedit),"选择转换格式的PBD文件",ls_path,ls_name,"PBD文件(*.pbd),*.pbd")
 if li_i = 1 then
+	if messagebox("提示","本操作会覆盖pbd同目录下的pbl文件,是否继续？",question!,yesno!,2)=2 then return
 	for li_i=1 to upperbound(ls_name)
 		string ls_allpath
 		if upperbound(ls_name)=1 then
@@ -427,6 +440,7 @@ if GetFileOpenName("选择导入PBL",filepath,filename,"pbl", "PBL(*.pbl),*.pbl,PBD(
 end if
 end event
 
+
 type m_help from menu within m_pbdwedit
 m_about m_about
 m_-2 m_-2
@@ -453,6 +467,7 @@ destroy(this.m_qq_qun)
 destroy(this.m_qq)
 end on
 
+
 type m_about from menu within m_help
 end type
 
@@ -463,12 +478,14 @@ end on
 event clicked;open(w_about)
 end event
 
+
 type m_-2 from menu within m_help
 end type
 
 on m_-2.create
 this.Text="-"
 end on
+
 
 type m_qq_qun from menu within m_help
 end type
@@ -480,6 +497,7 @@ end on
 event clicked;guo_dw.ShellExecuteA(handle(this),"open","tencent://groupwpa/?subcmd=all&param=7B2267726F757055696E223A363538383430363332","","",1)
 SetProfileString (guo_dw.is_rundir+"config.ini", 'QQ', 'rq', string(today(),'yyyy-mm-dd'))
 end event
+
 
 type m_qq from menu within m_help
 end type
